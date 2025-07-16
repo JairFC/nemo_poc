@@ -1,0 +1,49 @@
+# ------------------------------------------------------------------
+# Docker Compose para los Microservicios de IA del Asistente
+# Versión 1.0: Incluye servicios de TTS y STT
+# ------------------------------------------------------------------
+version: '3.8'
+
+services:
+  # --- Servicio de Texto-a-Voz (TTS) ---
+  tts-server:
+    image: nvcr.io/nvidia/nemo:25.04
+    container_name: tts_service
+    command: python3 /workspace/nemo_poc/api_server.py
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./api_server.py:/workspace/nemo_poc/api_server.py
+      - nemo_model_cache:/root/.cache/huggingface/hub
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  # --- Servicio de Voz-a-Texto (STT) ---
+  stt-server:
+    image: nvcr.io/nvidia/nemo:25.04
+    container_name: stt_service
+    command: python3 /workspace/nemo_poc/stt_server.py
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./stt_server.py:/workspace/nemo_poc/stt_server.py
+      - nemo_model_cache:/root/.cache/huggingface/hub
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+# --- Definición de Volúmenes Persistentes ---
+volumes:
+  nemo_model_cache:
+    driver: local

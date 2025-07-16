@@ -1,0 +1,35 @@
+# Archivos de Entorno y Secretos
+.env
+*.env
+secrets.ini
+secrets.yml
+
+# Caché de Python y archivos compilados
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+ENV/
+
+# Archivos de IDEs
+.idea/
+.vscode/
+*.swp
+
+# Archivos de Docker
+.dockerignore
+
+# Archivos de Test y Cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Archivos de construcción y distribución
+build/
+dist/
+*.egg-info/
